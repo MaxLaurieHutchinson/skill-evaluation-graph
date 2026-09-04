@@ -1,6 +1,6 @@
 {
   "name": "skill-evaluation-graph",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Graph-based auditor and behavioral evaluator for Agent Skills across Claude Code, Antigravity, and OpenAI Codex.",
   "author": {
     "name": "Max Laurie Hutchinson"
