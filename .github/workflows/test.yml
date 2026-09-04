@@ -1,0 +1,39 @@
+name: Test and Validate SEG
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Run evaluator regression tests
+        working-directory: plugins/skill-evaluation-graph
+        run: python -m unittest discover -s tests
+
+      - name: Run script tests
+        working-directory: plugins/skill-evaluation-graph
+        run: python -m unittest discover -s scripts
+
+      - name: Self-audit SEG
+        run: python plugins/skill-evaluation-graph/scripts/audit_skill.py plugins/skill-evaluation-graph --verbose
