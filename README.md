@@ -5,6 +5,7 @@
 # SEG: Skill Evaluation Graph
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Tests](https://github.com/MaxLaurieHutchinson/skill-evaluation-graph/actions/workflows/test.yml/badge.svg)](https://github.com/MaxLaurieHutchinson/skill-evaluation-graph/actions/workflows/test.yml)
 [![Architecture Evidence](https://github.com/MaxLaurieHutchinson/skill-evaluation-graph/actions/workflows/architecture.yml/badge.svg)](https://github.com/MaxLaurieHutchinson/skill-evaluation-graph/actions/workflows/architecture.yml)
 
 > **Evidence-driven evaluation for Agent Skills.**
@@ -20,7 +21,7 @@ SEG evaluates several independent concerns without allowing one good score to hi
 - **Specification Conformance** — Agent Skills and configured host manifests.
 - **Evaluation Integrity** — required Evaluators must complete successfully.
 - **Safety & Privacy** — destructive commands and common workstation-path leaks.
-- **Link Integrity** — relative references and package assets.
+- **Link Integrity** — relative references, package resources, and reachable local dependencies.
 - **Static Quality** — deterministic heuristics for routing, structure, context efficiency, and maintainability.
 - **Behavioural Reliability** — optional live Control vs. Treatment trials through a Harness Adapter.
 
@@ -217,6 +218,7 @@ It does **not** infer a full 1–5 rubric score from a proxy such as line count 
 - `plugins/skill-evaluation-graph/scripts/run_loop.py` — bounded evaluation/repair loop.
 - `plugins/skill-evaluation-graph/scripts/eval_skill.py` — static and live behavioural evaluation.
 - `plugins/skill-evaluation-graph/scripts/export_public_repo.py` — clean public-release compiler and validator.
+- `plugins/skill-evaluation-graph/tests/test_resource_reachability.py` — regression coverage for package resource reachability and JPO-style reference topology.
 - `docs/architecture.md` — evidence-backed runtime architecture guide.
 - `docs/architecture/seg.architecture.json` — reproducible Archify architecture source.
 - `plugins/skill-evaluation-graph/references/terminology.md` — canonical SEG vocabulary.
@@ -237,11 +239,12 @@ See [references/terminology.md](plugins/skill-evaluation-graph/references/termin
 ## Testing and release validation
 
 ```bash
+python -m unittest discover -s plugins/skill-evaluation-graph/tests
 python -m unittest discover -s plugins/skill-evaluation-graph/scripts
 python plugins/skill-evaluation-graph/scripts/audit_skill.py plugins/skill-evaluation-graph --verbose
 ```
 
-The workshop release pipeline runs the full unit/self-audit/export validation before publication. This public repository retains the architecture-evidence workflow, which validates the committed Archify source and regenerates its interactive/browser evidence artifact.
+This repository is the canonical SEG source and runs evaluator regression tests, script tests, and a SEG self-audit on pushes and pull requests to `main`. The separate architecture-evidence workflow validates the committed Archify source and regenerates its interactive/browser evidence artifact.
 
 ## Privacy
 
@@ -261,6 +264,7 @@ SEG has no project telemetry. Static evaluation processes user-selected files lo
 Before opening a PR:
 
 ```bash
+python -m unittest discover -s plugins/skill-evaluation-graph/tests
 python -m unittest discover -s plugins/skill-evaluation-graph/scripts
 python plugins/skill-evaluation-graph/scripts/audit_skill.py plugins/skill-evaluation-graph --verbose
 ```
