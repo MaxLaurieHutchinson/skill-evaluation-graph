@@ -1,0 +1,98 @@
+name: Validate Architecture Evidence
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - docs/architecture.md
+      - docs/architecture/**
+      - .github/workflows/architecture.yml
+  push:
+    branches: [ main ]
+    paths:
+      - docs/architecture.md
+      - docs/architecture/**
+      - .github/workflows/architecture.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository with provenance history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pinned Archify
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://github.com/tt-a1i/archify/releases/download/v2.16.0/archify.zip -o /tmp/archify.zip
+          echo '4c59fa6557a2385beaaef8c7219cc414573acc9f0c30a932d5053b0b20689a46  /tmp/archify.zip' | sha256sum -c -
+          mkdir -p /tmp/archify-skill
+          unzip -q /tmp/archify.zip -d /tmp/archify-skill
+          node /tmp/archify-skill/archify/bin/archify.mjs doctor
+
+      - name: Pin architecture evidence to this repository revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/architecture
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          source = Path('docs/architecture/seg.architecture.json')
+          target = Path('dist/architecture/seg.architecture.pinned.json')
+          spec = json.loads(source.read_text(encoding='utf-8'))
+          spec.setdefault('meta', {})['repository'] = {
+              'url': f"https://github.com/{os.environ['GITHUB_REPOSITORY']}",
+              'revision': os.environ['GITHUB_SHA'],
+          }
+          target.write_text(json.dumps(spec, indent=2) + '\n', encoding='utf-8')
+          print(f'pinned={target} revision={os.environ["GITHUB_SHA"]}')
+          PY
+
+      - name: Validate architecture source and repository evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          node /tmp/archify-skill/archify/bin/archify.mjs validate architecture dist/architecture/seg.architecture.pinned.json --quality showcase --repo-root "$GITHUB_WORKSPACE" --json | tee dist/architecture/validation.json
+
+      - name: Deliver deterministic interactive architecture
+        shell: bash
+        run: |
+          set -euo pipefail
+          node /tmp/archify-skill/archify/bin/archify.mjs deliver architecture dist/architecture/seg.architecture.pinned.json dist/architecture/seg-architecture.html --quality showcase --repo-root "$GITHUB_WORKSPACE" --json | tee dist/architecture/delivery.json
+
+      - name: Collect browser visual evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! node /tmp/archify-skill/archify/bin/archify.mjs visual-check dist/architecture/seg-architecture.html --json | tee dist/architecture/visual-check.json; then
+            echo 'Archify browser inspection failed once; retrying after a short pause.'
+            sleep 2
+            node /tmp/archify-skill/archify/bin/archify.mjs visual-check dist/architecture/seg-architecture.html --json | tee dist/architecture/visual-check.json
+          fi
+
+      - name: Record evidence metadata
+        shell: bash
+        run: |
+          printf 'seg_repository=%s\nseg_revision=%s\narchify_version=v2.16.0\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA" > dist/architecture/evidence.txt
+
+      - name: Upload architecture evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: seg-architecture-evidence
+          path: dist/architecture/
+          if-no-files-found: error

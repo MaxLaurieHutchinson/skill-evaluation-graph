@@ -1,0 +1,4 @@
+interface:
+  display_name: "SEG: Skill Evaluation Graph"
+  short_description: "Graph-based evaluation, auditing, and behavioral pressure testing for Agent Skills"
+  default_prompt: "Use $skill-evaluation-graph to evaluate, audit, and improve the skill in this directory."

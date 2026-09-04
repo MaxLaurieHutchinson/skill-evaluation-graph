@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# SessionStart hook for SEG (Skill Evaluation Graph) plugin
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+session_context="<SYSTEM_CAPABILITY>\nYou have access to the 'SEG: Skill Evaluation Graph' agent skill package at: ${PLUGIN_ROOT}\nUse it whenever analyzing, reviewing, scoring, refactoring, or optimizing any agent skill.\nCore tools:\n- scripts/audit_skill.py: static diagnostics, token profiling, and scorecard generation\n- scripts/run_loop.py: autonomous closed-loop evaluator runner\n- scripts/eval_skill.py: behavioral pressure evaluation runner\n</SYSTEM_CAPABILITY>"
+
+escape_for_json() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//\"/\\\"}"
+    s="${s//$'\n'/\\n}"
+    s="${s//$'\r'/\\r}"
+    s="${s//$'\t'/\\t}"
+    printf '%s' "$s"
+}
+
+escaped_context=$(escape_for_json "$session_context")
+
+if [ -n "${CURSOR_PLUGIN_ROOT:-}" ]; then
+  printf '{\n  "additional_context": "%s"\n}\n' "$escaped_context"
+elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
+  printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$escaped_context"
+else
+  printf '{\n  "additionalContext": "%s"\n}\n' "$escaped_context"
+fi
+
+exit 0

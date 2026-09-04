@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1290" height="608" viewBox="0 0 1290 608" role="img" aria-labelledby="title desc">
+  <title id="title">SEG — Skill Evaluation Graph runtime architecture</title>
+  <desc id="desc">Dark-mode static preview of SEG's validated Archify runtime model.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0 0L10 3.5 0 7Z" fill="#34d399"/></marker>
+    <marker id="arrow-gray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0 0L10 3.5 0 7Z" fill="#64748b"/></marker>
+    <marker id="arrow-pink" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0 0L10 3.5 0 7Z" fill="#fb7185"/></marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><path d="M0 0L10 3.5 0 7Z" fill="#a78bfa"/></marker>
+    <style>
+      text{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}
+      .title{fill:#fff;font-size:12px;font-weight:700}.sub{fill:#94a3b8;font-size:9px}.small{fill:#94a3b8;font-size:8px}.frame-label{font-size:9px;font-weight:700}
+      .external{fill:#1e293b;stroke:#94a3b8}.frontend{fill:#083344;stroke:#22d3ee}.backend{fill:#064e3b;stroke:#34d399}.bus{fill:#7c2d12;stroke:#fb923c}.security{fill:#881337;stroke:#fb7185}.cloud{fill:#78350f;stroke:#fbbf24}
+      .node{stroke-width:1.5}.mask{fill:#0f172a}.main-edge{fill:none;stroke:#34d399;stroke-width:1.8;marker-end:url(#arrow-green)}.plain-edge{fill:none;stroke:#64748b;stroke-width:1.5;marker-end:url(#arrow-gray)}.gate-edge{fill:none;stroke:#fb7185;stroke-width:1.5;stroke-dasharray:5 5;marker-end:url(#arrow-pink)}.repair-edge{fill:none;stroke:#a78bfa;stroke-width:1.5;stroke-dasharray:4 4;marker-end:url(#arrow-purple)}
+    </style>
+  </defs>
+  <rect width="1290" height="608" fill="#020617"/>
+  <rect width="1290" height="608" fill="url(#grid)"/>
+
+  <rect x="180" y="220" width="880" height="320" rx="12" fill="#241c16" stroke="#fbbf24" stroke-dasharray="8 4"/>
+  <rect x="184" y="229" width="128" height="17" rx="3" class="mask"/>
+  <text x="188" y="242" fill="#fbbf24" class="frame-label">SEG evaluation runtime</text>
+  <rect x="820" y="420" width="240" height="120" rx="8" fill="none" stroke="#fb7185" stroke-dasharray="4 4"/>
+  <rect x="824" y="429" width="226" height="17" rx="3" class="mask"/>
+  <text x="828" y="442" fill="#fb7185" class="frame-label">Mutation boundary — explicit opt-in only</text>
+
+  <path d="M180 285H210" class="main-edge"/>
+  <path d="M380 285H420" class="main-edge"/>
+  <path d="M600 285H640" class="main-edge"/>
+  <path d="M810 285H850" class="gate-edge"/>
+  <path d="M1030 292H1070" class="main-edge"/>
+  <path d="M295 130V250" class="plain-edge"/>
+  <path d="M380 95H520" class="plain-edge"/>
+  <path d="M700 95H1046V278H1070" class="plain-edge"/>
+  <path d="M940 320V450" class="gate-edge"/>
+  <path d="M940 520V560H510V320" class="repair-edge"/>
+
+  <g transform="translate(20 250)"><rect width="160" height="70" rx="6" class="external node"/><text x="80" y="34" text-anchor="middle" class="title">Agent / CLI Caller</text><text x="80" y="51" text-anchor="middle" class="sub">audit · loop · live eval</text></g>
+  <g transform="translate(210 250)"><rect width="170" height="70" rx="6" class="frontend node"/><text x="85" y="34" text-anchor="middle" class="title">SEG Entry Points</text><text x="85" y="51" text-anchor="middle" class="sub">intake · scope · dispatch</text></g>
+  <g transform="translate(420 250)"><rect width="180" height="70" rx="6" class="bus node"/><text x="90" y="34" text-anchor="middle" class="title">Evaluation DAG</text><text x="90" y="51" text-anchor="middle" class="sub">7 nodes · dependency waves</text></g>
+  <g transform="translate(640 250)"><rect width="170" height="70" rx="6" class="bus node"/><text x="85" y="34" text-anchor="middle" class="title">Evidence Join</text><text x="85" y="51" text-anchor="middle" class="sub">findings · metrics · digests</text></g>
+  <g transform="translate(850 250)"><rect width="180" height="70" rx="6" class="security node"/><text x="90" y="34" text-anchor="middle" class="title">Multi-Gate Oracle</text><text x="90" y="51" text-anchor="middle" class="sub">ACCEPT · REVISE · ESCALATE</text></g>
+  <g transform="translate(1070 250)"><rect width="180" height="70" rx="6" class="cloud node"/><text x="90" y="34" text-anchor="middle" class="title">Evidence Artifacts</text><text x="90" y="51" text-anchor="middle" class="sub">receipts · scorecards · trials</text></g>
+  <g transform="translate(210 60)"><rect width="170" height="70" rx="6" class="external node"/><text x="85" y="34" text-anchor="middle" class="title">Target Agent Skill</text><text x="85" y="51" text-anchor="middle" class="sub">SKILL.md + manifests</text></g>
+  <g transform="translate(520 60)"><rect width="180" height="70" rx="6" class="backend node"/><text x="90" y="34" text-anchor="middle" class="title">Live Behaviour</text><text x="90" y="51" text-anchor="middle" class="sub">control vs treatment</text></g>
+  <g transform="translate(850 450)"><rect width="180" height="70" rx="6" class="security node"/><text x="90" y="34" text-anchor="middle" class="title">Repair Sandbox</text><text x="90" y="51" text-anchor="middle" class="sub">sandbox · verify · rollback</text></g>
+
+  <rect x="390" y="74" width="120" height="15" rx="3" class="mask"/><text x="450" y="85" text-anchor="middle" class="small">optional live benchmark</text>
+  <rect x="921" y="334" width="38" height="15" rx="3" class="mask"/><text x="940" y="345" text-anchor="middle" fill="#fb7185" font-size="8">REVISE</text>
+  <rect x="670" y="530" width="110" height="15" rx="3" class="mask"/><text x="725" y="541" text-anchor="middle" fill="#fb923c" font-size="8">re-evaluate candidate</text>
+
+  <text x="40" y="572" class="title">Legend</text>
+  <g transform="translate(40 582)"><rect width="16" height="10" rx="2.5" class="frontend"/><text x="22" y="9" class="sub">Frontend</text></g>
+  <g transform="translate(145 582)"><rect width="16" height="10" rx="2.5" class="backend"/><text x="22" y="9" class="sub">Backend</text></g>
+  <g transform="translate(245 582)"><rect width="16" height="10" rx="2.5" class="cloud"/><text x="22" y="9" class="sub">Cloud</text></g>
+  <g transform="translate(335 582)"><rect width="16" height="10" rx="2.5" class="security"/><text x="22" y="9" class="sub">Security</text></g>
+  <g transform="translate(440 582)"><rect width="16" height="10" rx="2.5" class="bus"/><text x="22" y="9" class="sub">Message bus</text></g>
+  <g transform="translate(560 582)"><rect width="16" height="10" rx="2.5" class="external"/><text x="22" y="9" class="sub">External</text></g>
+</svg>

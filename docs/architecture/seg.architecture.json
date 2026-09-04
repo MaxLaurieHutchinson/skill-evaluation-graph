@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "SEG \u2014 Skill Evaluation Graph",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "output": "seg-architecture.html"
+  },
+  "components": [
+    {
+      "id": "caller",
+      "type": "external",
+      "label": "Agent / CLI Caller",
+      "sublabel": "audit \u00b7 loop \u00b7 live eval",
+      "pos": [
+        20,
+        250
+      ],
+      "size": [
+        160,
+        70
+      ]
+    },
+    {
+      "id": "entrypoints",
+      "type": "frontend",
+      "label": "SEG Entry Points",
+      "sublabel": "intake \u00b7 scope \u00b7 dispatch",
+      "pos": [
+        210,
+        250
+      ],
+      "size": [
+        170,
+        70
+      ],
+      "sources": [
+        {
+          "path": "plugins/skill-evaluation-graph/scripts/audit_skill.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/scripts/run_loop.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/scripts/eval_skill.py"
+        }
+      ]
+    },
+    {
+      "id": "dag",
+      "type": "messagebus",
+      "label": "Evaluation DAG",
+      "sublabel": "7 nodes \u00b7 dependency waves",
+      "pos": [
+        420,
+        250
+      ],
+      "size": [
+        180,
+        70
+      ],
+      "sources": [
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/graph.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/evaluators/__init__.py"
+        }
+      ]
+    },
+    {
+      "id": "join",
+      "type": "messagebus",
+      "label": "Evidence Join",
+      "sublabel": "findings \u00b7 metrics \u00b7 digests",
+      "pos": [
+        640,
+        250
+      ],
+      "size": [
+        170,
+        70
+      ],
+      "sources": [
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/oracle.py"
+        }
+      ]
+    },
+    {
+      "id": "oracle",
+      "type": "security",
+      "label": "Multi-Gate Oracle",
+      "sublabel": "ACCEPT \u00b7 REVISE \u00b7 ESCALATE",
+      "pos": [
+        850,
+        250
+      ],
+      "size": [
+        180,
+        70
+      ],
+      "sources": [
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/oracle.py"
+        }
+      ]
+    },
+    {
+      "id": "evidence",
+      "type": "cloud",
+      "label": "Evidence Artifacts",
+      "sublabel": "receipts \u00b7 scorecards \u00b7 trials",
+      "pos": [
+        1070,
+        250
+      ],
+      "size": [
+        180,
+        70
+      ],
+      "sources": [
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/receipts.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/scripts/audit_skill.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/scripts/run_loop.py"
+        }
+      ]
+    },
+    {
+      "id": "target",
+      "type": "external",
+      "label": "Target Agent Skill",
+      "sublabel": "SKILL.md + manifests",
+      "pos": [
+        210,
+        60
+      ],
+      "size": [
+        170,
+        70
+      ]
+    },
+    {
+      "id": "behaviour",
+      "type": "backend",
+      "label": "Live Behaviour",
+      "sublabel": "control vs treatment",
+      "pos": [
+        520,
+        60
+      ],
+      "size": [
+        180,
+        70
+      ],
+      "sources": [
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/behaviour/runner.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/behaviour/harnesses/base.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/behaviour/harnesses/codex.py"
+        }
+      ]
+    },
+    {
+      "id": "repair",
+      "type": "security",
+      "label": "Repair Sandbox",
+      "sublabel": "sandbox \u00b7 verify \u00b7 rollback",
+      "pos": [
+        850,
+        450
+      ],
+      "size": [
+        180,
+        70
+      ],
+      "sources": [
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/repair/planner.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/src/seg/repair/isolator.py"
+        },
+        {
+          "path": "plugins/skill-evaluation-graph/scripts/run_loop.py"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "SEG evaluation runtime",
+      "wraps": [
+        "entrypoints",
+        "dag",
+        "join",
+        "oracle",
+        "repair"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Mutation boundary \u2014 explicit opt-in only",
+      "wraps": [
+        "repair"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "caller",
+      "to": "entrypoints",
+      "variant": "emphasis"
+    },
+    {
+      "from": "entrypoints",
+      "to": "dag",
+      "variant": "emphasis"
+    },
+    {
+      "from": "dag",
+      "to": "join",
+      "variant": "emphasis"
+    },
+    {
+      "from": "join",
+      "to": "oracle",
+      "variant": "security"
+    },
+    {
+      "from": "oracle",
+      "to": "evidence",
+      "variant": "emphasis"
+    },
+    {
+      "from": "target",
+      "to": "entrypoints",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "target",
+      "to": "behaviour",
+      "label": "optional live benchmark",
+      "variant": "default"
+    },
+    {
+      "from": "behaviour",
+      "to": "evidence",
+      "variant": "default"
+    },
+    {
+      "from": "oracle",
+      "to": "repair",
+      "label": "REVISE",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        940,
+        345
+      ]
+    },
+    {
+      "from": "repair",
+      "to": "dag",
+      "label": "re-evaluate candidate",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [
+        [
+          940,
+          560
+        ],
+        [
+          510,
+          560
+        ],
+        [
+          510,
+          340
+        ]
+      ],
+      "labelAt": [
+        725,
+        540
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Evaluator graph",
+      "items": [
+        "The DAG is executable, dependency-aware and parallel by wave \u2014 not a decorative flowchart.",
+        "Wave 1: schema, links/syntax, safety/privacy and portability. Wave 2: trigger routing, token economics and behavioural policy coverage.",
+        "Each node records status, duration, findings, metrics, evidence, input digest and output digest."
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Decision and repair",
+      "items": [
+        "Evidence Join fails closed on evaluator failure before the Oracle evaluates integrity, specification, safety/privacy, links and quality policy.",
+        "REVISE stages deterministic repairs in an isolated sandbox, re-evaluates the candidate and previews a verified diff.",
+        "Mutation is explicit opt-in and protected by a backup/rollback path."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Behaviour and provenance",
+      "items": [
+        "Live behaviour is a separate control-vs-treatment benchmark path with repeated trials.",
+        "Trials measure compliance, uplift, rationalisations, latency variance and infrastructure failures.",
+        "Canonical SHA-256 receipts preserve target, configuration, node, Oracle and repair evidence as tamper-evident artifacts."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Rounded Square -->
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#bgGrad)" stroke="#334155" stroke-width="3" />
+
+  <!-- Graph Edges -->
+  <path d="M 40 44 L 88 44" stroke="#475569" stroke-width="4" stroke-dasharray="4 3" />
+  <path d="M 40 44 L 64 88" stroke="url(#primaryGrad)" stroke-width="4" />
+  <path d="M 88 44 L 64 88" stroke="url(#primaryGrad)" stroke-width="4" />
+  <path d="M 64 88 L 64 104" stroke="url(#accentGrad)" stroke-width="3" />
+
+  <!-- Graph Nodes -->
+  <!-- Top Left Node (Diagnostics) -->
+  <circle cx="40" cy="44" r="14" fill="#1E293B" stroke="#38BDF8" stroke-width="3" />
+  <circle cx="40" cy="44" r="6" fill="#38BDF8" />
+
+  <!-- Top Right Node (Behavioral) -->
+  <circle cx="88" cy="44" r="14" fill="#1E293B" stroke="#818CF8" stroke-width="3" />
+  <circle cx="88" cy="44" r="6" fill="#818CF8" />
+
+  <!-- Bottom Join/Oracle Node (Verifier) -->
+  <circle cx="64" cy="88" r="16" fill="#0F172A" stroke="url(#accentGrad)" stroke-width="3.5" />
+  <!-- Verification Checkmark Inside Join Node -->
+  <path d="M 58 88 L 62 92 L 71 83" fill="none" stroke="#34D399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

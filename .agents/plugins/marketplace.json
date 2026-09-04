@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    {
+      "name": "skill-evaluation-graph",
+      "source": {
+        "source": "local",
+        "path": "./plugins/skill-evaluation-graph"
+      },
+      "category": "Developer Tools",
+      "description": "Graph-based auditor and behavioral evaluator for Agent Skills across Claude Code, Antigravity, and OpenAI Codex.",
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      }
+    }
+  ]
+}

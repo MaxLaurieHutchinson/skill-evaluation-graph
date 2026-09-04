@@ -1,0 +1,21 @@
+{
+  "name": "skill-evaluation-graph",
+  "version": "1.0.0",
+  "description": "Graph-based auditor and behavioral evaluator for Agent Skills across Claude Code, Antigravity, and OpenAI Codex.",
+  "author": {
+    "name": "Max Laurie Hutchinson"
+  },
+  "repository": "https://github.com/MaxLaurieHutchinson/skill-evaluation-graph",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "evaluation-graph",
+    "seg",
+    "audit",
+    "token-economics",
+    "evaluator-loop",
+    "antigravity",
+    "claude-code",
+    "codex"
+  ]
+}

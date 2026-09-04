@@ -1,0 +1,47 @@
+{
+  "name": "skill-evaluation-graph",
+  "version": "1.0.0",
+  "description": "Graph-based auditor and behavioral evaluator for Agent Skills across Claude Code, Antigravity, and OpenAI Codex.",
+  "author": {
+    "name": "Max Laurie Hutchinson"
+  },
+  "homepage": "https://github.com/MaxLaurieHutchinson/skill-evaluation-graph",
+  "repository": "https://github.com/MaxLaurieHutchinson/skill-evaluation-graph",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "evaluation-graph",
+    "seg",
+    "audit",
+    "token-economics",
+    "evaluator-loop",
+    "antigravity",
+    "claude-code",
+    "codex"
+  ],
+  "skills": "./",
+  "interface": {
+    "displayName": "SEG: Skill Evaluation Graph",
+    "shortDescription": "Graph-based evaluation, auditing, and behavioral pressure testing for Agent Skills.",
+    "longDescription": "SEG is an evidence-driven evaluation graph for Agent Skills. It evaluates token economics, progressive disclosure tiers, multi-harness compatibility, and behavioral resistance to pressure (TDD for prompts). Includes bounded self-healing loops and tamper-evident evaluation receipts.",
+    "developerName": "Max Laurie Hutchinson",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/MaxLaurieHutchinson/skill-evaluation-graph",
+    "privacyPolicyURL": "https://github.com/MaxLaurieHutchinson/skill-evaluation-graph/blob/main/PRIVACY.md",
+    "termsOfServiceURL": "https://github.com/MaxLaurieHutchinson/skill-evaluation-graph/blob/main/TERMS.md",
+    "defaultPrompt": [
+      "Use skill-evaluation-graph to audit and score the skill in this directory.",
+      "Run a behavioral pressure test on this skill to check anti-rationalization defenses.",
+      "Profile token budget and progressive disclosure across reference files."
+    ],
+    "brandColor": "#0284C7",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/logo.svg",
+    "screenshots": []
+  }
+}
