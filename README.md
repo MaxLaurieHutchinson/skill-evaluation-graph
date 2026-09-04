@@ -222,9 +222,9 @@ It does **not** infer a full 1–5 rubric score from a proxy such as line count 
 - `plugins/skill-evaluation-graph/references/terminology.md` — canonical SEG vocabulary.
 - `plugins/skill-evaluation-graph/references/claim-audit.md` — evidence classification for public claims.
 
-## Canonical vocabulary
+## Ubiquitous Language
 
-SEG deliberately uses a small domain vocabulary. Important distinctions include:
+SEG uses a small shared language so the same concepts mean the same thing across the evaluator, Oracle, repair loop, documentation, and evidence.
 
 - **Evidence** is an observation; a **Finding** interprets Evidence.
 - A **Gate** evaluates one predicate; the **Oracle** evaluates Gates and returns a Verdict.
@@ -266,6 +266,17 @@ python plugins/skill-evaluation-graph/scripts/audit_skill.py plugins/skill-evalu
 ```
 
 Use the vocabulary in [references/terminology.md](plugins/skill-evaluation-graph/references/terminology.md), keep external rules tied to the primary source that owns them, and do not promote evidence beyond the level actually demonstrated.
+
+## Support SEG
+
+SEG is open source and independently maintained.
+
+If SEG saves you time, improves your Agent Skills, or you would like to support continued development, you can support the project through GitHub Sponsors or Buy Me a Coffee.
+
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-Support-ea4aaa?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/MaxLaurieHutchinson)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-FFDD00?logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/maxhutchinson)
+
+Support is optional. Stars, issues, feedback, benchmarks, and contributions are equally valuable.
 
 ## License
 
