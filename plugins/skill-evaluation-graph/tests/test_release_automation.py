@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import re
 import shutil
 import sys
 import tempfile
@@ -25,8 +26,14 @@ class TestReleaseAutomation(unittest.TestCase):
         config = json.loads((REPO / "release-please-config.json").read_text(encoding="utf-8"))
         package = config["packages"]["."]
         self.assertEqual(package["release-type"], "simple")
+        self.assertEqual(package["version-file"], "version.txt")
         self.assertTrue(config["include-v-in-tag"])
         self.assertFalse(config["include-component-in-tag"])
+
+        version_file = REPO / package["version-file"]
+        self.assertTrue(version_file.is_file())
+        canonical_version = version_file.read_text(encoding="utf-8").strip()
+        self.assertRegex(canonical_version, r"^\d+\.\d+\.\d+$")
 
         extra = package["extra-files"]
         json_targets = {
@@ -42,6 +49,10 @@ class TestReleaseAutomation(unittest.TestCase):
                 "plugins/skill-evaluation-graph/gemini-extension.json": "$.version",
             },
         )
+        for path in json_targets:
+            manifest = json.loads((REPO / path).read_text(encoding="utf-8"))
+            self.assertEqual(manifest["version"], canonical_version, path)
+
         generic_targets = {
             item["path"] for item in extra
             if isinstance(item, dict) and item.get("type") == "generic"
@@ -50,6 +61,9 @@ class TestReleaseAutomation(unittest.TestCase):
 
         runtime = (REPO / "plugins/skill-evaluation-graph/src/seg/__init__.py").read_text(encoding="utf-8")
         self.assertIn("x-release-please-version", runtime)
+        match = re.search(r'__version__\s*=\s*"([^"]+)"', runtime)
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), canonical_version)
 
     def test_release_workflow_is_test_gated_and_builds_release_assets(self):
         workflow = (REPO / ".github/workflows/release.yml").read_text(encoding="utf-8")
