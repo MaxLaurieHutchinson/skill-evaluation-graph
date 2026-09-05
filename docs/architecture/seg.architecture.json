@@ -306,7 +306,7 @@
       "title": "Evaluator graph",
       "items": [
         "The DAG is executable, dependency-aware and parallel by wave \u2014 not a decorative flowchart.",
-        "Wave 1: schema, links/syntax, safety/privacy and portability. Wave 2: trigger routing, token economics and behavioural policy coverage.",
+        "Wave 1: schema, links/syntax and safety/privacy. Wave 2: portability, trigger routing, token economics and behavioural policy coverage.",
         "Each node records status, duration, findings, metrics, evidence, input digest and output digest."
       ]
     },

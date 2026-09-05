@@ -16,8 +16,8 @@ from seg.graph import DAG
 def build_default_evaluation_dag() -> DAG:
     """
     Construct the canonical SEG evaluation DAG with explicit nodes and dependencies:
-    - Wave 1 (Root parallel diamond): schema, links_syntax, safety_privacy, portability
-    - Wave 2 (Dependent nodes): trigger_routing, token_economics, behaviour_policy
+    - Wave 1 (Root parallel diamond): schema, links_syntax, safety_privacy
+    - Wave 2 (Dependent nodes): portability, trigger_routing, token_economics, behaviour_policy
     """
     dag = DAG("SEG Default Evaluation DAG")
 
@@ -25,9 +25,9 @@ def build_default_evaluation_dag() -> DAG:
     dag.add_node(SchemaEvaluatorNode("schema"))
     dag.add_node(LinksSyntaxEvaluatorNode("links_syntax"))
     dag.add_node(SafetyPrivacyEvaluatorNode("safety_privacy"))
-    dag.add_node(PortabilityEvaluatorNode("portability"))
 
     # Dependent nodes (Wave 2)
+    dag.add_node(PortabilityEvaluatorNode("portability"))         # depends on schema
     dag.add_node(TriggerRoutingEvaluatorNode("trigger_routing"))  # depends on schema
     dag.add_node(TokensEvaluatorNode("token_economics"))          # depends on schema
     dag.add_node(BehaviourPolicyEvaluatorNode("behaviour_policy"))# depends on schema

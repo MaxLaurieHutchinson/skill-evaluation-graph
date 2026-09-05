@@ -38,6 +38,7 @@ Options:
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from datetime import datetime, timezone
 import json
 import os
@@ -320,10 +321,18 @@ class EvaluatorLoopEngine:
                     ]
                     gates_preserved = integrity_ok and (len(regressed_gates) == 0)
 
-                    # 3. Candidate MUST NOT introduce new ERROR findings (error count cannot increase)
-                    orig_errors = sum(1 for f in evidence.total_findings if f.severity == "ERROR")
-                    cand_errors = sum(1 for f in candidate_evidence.total_findings if f.severity == "ERROR")
-                    errors_ok = (cand_errors <= orig_errors)
+                    # 3. Removing old errors must not hide a newly introduced error.
+                    # Ignore line shifts but preserve rule, file, category and message identity.
+                    orig_errors = Counter(
+                        (f.rule_id, f.file, f.category, f.message)
+                        for f in evidence.total_findings if f.severity == "ERROR"
+                    )
+                    cand_errors = Counter(
+                        (f.rule_id, f.file, f.category, f.message)
+                        for f in candidate_evidence.total_findings if f.severity == "ERROR"
+                    )
+                    new_errors = cand_errors - orig_errors
+                    errors_ok = not new_errors
 
                     # 4. Static Quality Score or findings count must strictly improve without score regression
                     score_or_findings_improved = (
@@ -343,7 +352,7 @@ class EvaluatorLoopEngine:
                         if regressed_gates:
                             rejection_reasons.append(f"mandatory gate(s) regressed: {', '.join(regressed_gates)}")
                         if not errors_ok:
-                            rejection_reasons.append(f"new errors introduced ({orig_errors} -> {cand_errors})")
+                            rejection_reasons.append(f"{sum(new_errors.values())} new error finding(s) introduced")
                         if not score_or_findings_improved:
                             rejection_reasons.append(f"score/findings not improved ({evidence.static_quality_score} -> {candidate_evidence.static_quality_score})")
 
@@ -386,7 +395,7 @@ class EvaluatorLoopEngine:
                             self.log(f"Applied {len(applied_list)} verified patch(es) with rollback protection to disk.", "[PATCH]")
                             evaluated_tree_digest = compute_tree_digest(self.skill_dir)
                         else:
-                            self.log("Rollback-protected mutation failed; restored from pre-mutation snapshot.", "[ERROR]")
+                            self.log("Mutation aborted or failed; target was unchanged or restored from its snapshot.", "[NOTICE]")
                     else:
                         self.log(
                             "Default READ-ONLY mode: Staged repairs verified and previewed above. Target files untouched on disk.",
@@ -451,7 +460,6 @@ class EvaluatorLoopEngine:
         receipt = generate_evaluation_receipt(
             run_id=self.run_id,
             target_skill_path=self.skill_dir,
-            seg_version="1.0.0",
             config={
                 "target_score": self.target_score,
                 "max_iterations": self.max_iterations,
