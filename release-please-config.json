@@ -1,0 +1,47 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "include-v-in-tag": true,
+  "include-component-in-tag": false,
+  "pull-request-title-pattern": "chore: release ${version}",
+  "pull-request-header": "Automated SEG release PR. Merge this PR to grant publication authority; versioning, tagging, packaging, checksums, and GitHub Release assets are handled by CI.",
+  "changelog-sections": [
+    {"type": "feat", "section": "Features"},
+    {"type": "fix", "section": "Fixes"},
+    {"type": "perf", "section": "Performance"},
+    {"type": "refactor", "section": "Refactoring"},
+    {"type": "docs", "section": "Documentation"},
+    {"type": "build", "section": "Build"},
+    {"type": "ci", "section": "CI", "hidden": true},
+    {"type": "test", "section": "Tests", "hidden": true},
+    {"type": "chore", "section": "Maintenance", "hidden": true}
+  ],
+  "packages": {
+    ".": {
+      "package-name": "skill-evaluation-graph",
+      "release-type": "simple",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "plugins/skill-evaluation-graph/src/seg/__init__.py"
+        },
+        {
+          "type": "json",
+          "path": "plugins/skill-evaluation-graph/.codex-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/skill-evaluation-graph/.claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/skill-evaluation-graph/gemini-extension.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  }
+}
