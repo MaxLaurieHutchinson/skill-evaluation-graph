@@ -46,7 +46,7 @@ def validate_release(repo: Path) -> bool:
     plugin = repo / PLUGIN
     errors = []
     required = [
-        "README.md", "CHANGELOG.md", "LICENSE", "PRIVACY.md", "TERMS.md", ".gitignore",
+        "README.md", "CHANGELOG.md", "version.txt", "LICENSE", "PRIVACY.md", "TERMS.md", ".gitignore",
         ".agents/plugins/marketplace.json", ".github/workflows/test.yml",
         ".github/workflows/architecture.yml", ".github/workflows/release.yml",
         "release-please-config.json", ".release-please-manifest.json",
@@ -80,6 +80,12 @@ def validate_release(repo: Path) -> bool:
         if "x-release-please-version" not in runtime_text:
             errors.append("Runtime __version__ must carry x-release-please-version annotation")
 
+        canonical_version = (repo / "version.txt").read_text(encoding="utf-8").strip()
+        if _semver_tuple(canonical_version) is None:
+            errors.append(f"version.txt is not MAJOR.MINOR.PATCH: {canonical_version}")
+        elif canonical_version != versions[0]:
+            errors.append(f"version.txt/runtime version mismatch: {canonical_version} != {versions[0]}")
+
         for path in (".codex-plugin/plugin.json", ".claude-plugin/plugin.json", "gemini-extension.json"):
             manifest = json.loads((plugin / path).read_text(encoding="utf-8"))
             if manifest.get("version") != versions[0]:
@@ -89,6 +95,8 @@ def validate_release(repo: Path) -> bool:
         release_package = release_config.get("packages", {}).get(".", {})
         if release_package.get("release-type") != "simple":
             errors.append("Release Please root package must use release-type simple")
+        if release_package.get("version-file") != "version.txt":
+            errors.append("Release Please simple strategy must use canonical version.txt")
         if release_config.get("include-v-in-tag") is not True or release_config.get("include-component-in-tag") is not False:
             errors.append("Release Please tags must use plain vMAJOR.MINOR.PATCH tags")
         expected_json_targets = {
