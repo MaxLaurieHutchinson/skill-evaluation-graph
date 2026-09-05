@@ -3,7 +3,7 @@ SEG - Skill Evaluation Graph
 An evidence-driven evaluation graph for AI Agent Skills.
 """
 
-__version__ = "1.0.2"
+__version__ = "1.0.2"  # x-release-please-version
 
 from seg.models import (
     Finding,
