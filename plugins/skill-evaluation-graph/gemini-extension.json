@@ -1,6 +1,6 @@
 {
   "name": "skill-evaluation-graph",
   "description": "Graph-based auditor and behavioral evaluator for Agent Skills across Claude Code, Antigravity, and OpenAI Codex.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "contextFileName": "GEMINI.md"
 }

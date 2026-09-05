@@ -29,6 +29,12 @@ SEG evaluates several independent concerns without allowing one good score to hi
 
 ## Quick start
 
+Requires Python 3.10 or newer. Install the runtime dependency first:
+
+```bash
+python -m pip install -r plugins/skill-evaluation-graph/requirements.txt
+```
+
 Run a deterministic evaluation:
 
 ```bash
@@ -113,7 +119,7 @@ See [references/claim-audit.md](plugins/skill-evaluation-graph/references/claim-
 
 ## Installation
 
-The public repository is compiled into a marketplace root plus the actual Skill/plugin package at:
+This canonical repository contains a marketplace root and the Skill/plugin package at:
 
 ```text
 plugins/skill-evaluation-graph/
@@ -121,7 +127,7 @@ plugins/skill-evaluation-graph/
 
 ### OpenAI Codex
 
-Use the repository marketplace through Codex/ChatGPT plugin administration or the Plugins UI. The exported repository contains:
+Use the repository marketplace through Codex/ChatGPT plugin administration or the Plugins UI. The repository contains:
 
 ```text
 .agents/plugins/marketplace.json
@@ -144,7 +150,7 @@ SEG also includes `gemini-extension.json` for Gemini CLI extension compatibility
 
 ### Google Antigravity
 
-Antigravity supports the Agent Skills standard directly. Install the exported Skill package into a supported skills directory, for example a workspace skill:
+Antigravity supports the Agent Skills standard directly. Install the nested Skill package into a supported skills directory, for example a workspace skill:
 
 ```text
 <workspace-root>/.agents/skills/skill-evaluation-graph/
@@ -156,7 +162,7 @@ SEG does not claim that `gemini-extension.json` is an Antigravity plugin manifes
 
 ### Anthropic Claude Code
 
-The exported package includes `.claude-plugin/plugin.json`, `CLAUDE.md`, and hook metadata. Use the bundled directory `plugins/skill-evaluation-graph` with Claude Code's supported plugin/skill installation workflow for your environment.
+The nested package includes `.claude-plugin/plugin.json`, `CLAUDE.md`, and hook metadata. Use the bundled directory `plugins/skill-evaluation-graph` with Claude Code's supported plugin/skill installation workflow for your environment.
 
 ## Packaging and portability evidence
 
@@ -217,8 +223,9 @@ It does **not** infer a full 1–5 rubric score from a proxy such as line count 
 - `plugins/skill-evaluation-graph/scripts/audit_skill.py` — deterministic audit/reporting CLI over the canonical engine.
 - `plugins/skill-evaluation-graph/scripts/run_loop.py` — bounded evaluation/repair loop.
 - `plugins/skill-evaluation-graph/scripts/eval_skill.py` — static and live behavioural evaluation.
-- `plugins/skill-evaluation-graph/scripts/export_public_repo.py` — clean public-release compiler and validator.
-- `plugins/skill-evaluation-graph/tests/test_resource_reachability.py` — regression coverage for package resource reachability and JPO-style reference topology.
+- `scripts/validate_release.py` — read-only validation of the canonical release tree.
+- `plugins/skill-evaluation-graph/evaluations/scenarios/` — versioned behavioural scenario catalogue.
+- `plugins/skill-evaluation-graph/tests/` — evaluator, graph, receipt, behaviour, repair, release and resource-reachability regression coverage.
 - `docs/architecture.md` — evidence-backed runtime architecture guide.
 - `docs/architecture/seg.architecture.json` — reproducible Archify architecture source.
 - `plugins/skill-evaluation-graph/references/terminology.md` — canonical SEG vocabulary.
@@ -242,9 +249,10 @@ See [references/terminology.md](plugins/skill-evaluation-graph/references/termin
 python -m unittest discover -s plugins/skill-evaluation-graph/tests
 python -m unittest discover -s plugins/skill-evaluation-graph/scripts
 python plugins/skill-evaluation-graph/scripts/audit_skill.py plugins/skill-evaluation-graph --verbose
+python scripts/validate_release.py
 ```
 
-This repository is the canonical SEG source and runs evaluator regression tests, script tests, and a SEG self-audit on pushes and pull requests to `main`. The separate architecture-evidence workflow validates the committed Archify source and regenerates its interactive/browser evidence artifact.
+This repository is the canonical SEG source and runs evaluator regression tests, script tests, a SEG self-audit, and release-tree validation on pushes and pull requests to `main`. The separate architecture-evidence workflow validates the committed Archify source and regenerates its interactive/browser evidence artifact.
 
 ## Privacy
 
@@ -267,6 +275,7 @@ Before opening a PR:
 python -m unittest discover -s plugins/skill-evaluation-graph/tests
 python -m unittest discover -s plugins/skill-evaluation-graph/scripts
 python plugins/skill-evaluation-graph/scripts/audit_skill.py plugins/skill-evaluation-graph --verbose
+python scripts/validate_release.py
 ```
 
 Use the vocabulary in [references/terminology.md](plugins/skill-evaluation-graph/references/terminology.md), keep external rules tied to the primary source that owns them, and do not promote evidence beyond the level actually demonstrated.

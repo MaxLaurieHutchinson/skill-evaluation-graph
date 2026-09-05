@@ -10,6 +10,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from seg import __version__
+
 
 def canonical_json_bytes(data: Any) -> bytes:
     """Serialize data into deterministic sorted compact JSON bytes (compact separators, sorted keys)."""
@@ -64,7 +66,7 @@ def compute_tree_digest(root_path: Path) -> str:
 def generate_evaluation_receipt(
     run_id: str,
     target_skill_path: Path,
-    seg_version: str = "1.0.0",
+    seg_version: str = __version__,
     config: Optional[Dict[str, Any]] = None,
     node_results: Optional[List[Dict[str, Any]]] = None,
     joined_evidence: Optional[Dict[str, Any]] = None,

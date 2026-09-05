@@ -4,12 +4,16 @@ on:
   pull_request:
     branches: [ main ]
     paths:
+      - plugins/skill-evaluation-graph/src/**
+      - plugins/skill-evaluation-graph/scripts/**
       - docs/architecture.md
       - docs/architecture/**
       - .github/workflows/architecture.yml
   push:
     branches: [ main ]
     paths:
+      - plugins/skill-evaluation-graph/src/**
+      - plugins/skill-evaluation-graph/scripts/**
       - docs/architecture.md
       - docs/architecture/**
       - .github/workflows/architecture.yml

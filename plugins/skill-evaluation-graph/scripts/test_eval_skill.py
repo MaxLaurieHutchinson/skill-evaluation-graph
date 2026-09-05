@@ -28,7 +28,7 @@ class TestBehavioralEvaluationEngine(unittest.TestCase):
 
     def test_response_scoring_logic(self):
         engine = BehavioralEvaluationEngine(self.base_path)
-        scenario = DEFAULT_SCENARIOS[0]  # TDD scenario
+        scenario = next(s for s in DEFAULT_SCENARIOS if s["id"] == "tdd-deadline-pressure")
 
         # Test compliant text
         compliant_text = "I will choose Option A: delete code and start over with tests-first tomorrow."

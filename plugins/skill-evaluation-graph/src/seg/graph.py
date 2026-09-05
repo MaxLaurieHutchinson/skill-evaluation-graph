@@ -167,6 +167,7 @@ class DAG:
 
         for wave_idx, wave in enumerate(waves, 1):
             _log(f"Wave {wave_idx}/{len(waves)}: executing [{', '.join(wave)}]")
+            wave_context = ctx.copy()
 
             # Worker function for thread pool
             def _run_node(nid: str) -> tuple[str, NodeResult]:
@@ -187,8 +188,9 @@ class DAG:
                     )
                 else:
                     if node_timeout is not None and node_timeout > 0:
-                        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as single_exec:
-                            fut = single_exec.submit(node.execute, skill_path, ctx)
+                        single_exec = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+                        try:
+                            fut = single_exec.submit(node.execute, skill_path, wave_context.copy())
                             try:
                                 res = fut.result(timeout=node_timeout)
                                 if res.status in (None, NodeStatus.PENDING):
@@ -205,9 +207,12 @@ class DAG:
                                     status=NodeStatus.FAILED,
                                     error_message=str(exc),
                                 )
+                        finally:
+                            # A context manager would wait for the timed-out worker on exit.
+                            single_exec.shutdown(wait=False, cancel_futures=True)
                     else:
                         try:
-                            res = node.execute(skill_path, ctx)
+                            res = node.execute(skill_path, wave_context.copy())
                             if res.status in (None, NodeStatus.PENDING):
                                 res.status = NodeStatus.SUCCESS
                         except Exception as exc:

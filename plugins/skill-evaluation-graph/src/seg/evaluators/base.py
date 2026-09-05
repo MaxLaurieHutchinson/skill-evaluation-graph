@@ -14,39 +14,20 @@ from seg.receipts import compute_tree_digest, sha256_digest
 
 
 def parse_frontmatter(content: str) -> Tuple[Optional[Dict[str, Any]], str]:
-    """Parse YAML frontmatter from markdown content with standard library fallback."""
-    if not content.startswith("---"):
+    """Parse YAML frontmatter, failing closed when YAML cannot be validated."""
+    match = re.match(r"\A---[ \t]*\r?\n(.*?)^---[ \t]*(?:\r?\n|\Z)", content, re.MULTILINE | re.DOTALL)
+    if match is None:
         return None, content
-
-    parts = content.split("---", 2)
-    if len(parts) < 3:
-        return None, content
-
-    fm_text = parts[1]
-    body = parts[2]
-
+    body = content[match.end():]
     try:
         import yaml
-        data = yaml.safe_load(fm_text)
-        if isinstance(data, dict):
-            return data, body
-    except Exception:
-        pass
-
-    # Regex fallback parser
-    data = {}
-    for line in fm_text.splitlines():
-        line = line.strip()
-        if not line or line.startswith("#"):
-            continue
-        match = re.match(r"^([a-zA-Z0-9_-]+)\s*:\s*(.*)$", line)
-        if match:
-            key, val = match.group(1), match.group(2).strip()
-            if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
-                val = val[1:-1]
-            data[key] = val
-
-    return data if data else None, body
+    except ImportError as exc:
+        raise RuntimeError("PyYAML is required: install the package's requirements.txt") from exc
+    try:
+        data = yaml.safe_load(match.group(1))
+    except yaml.YAMLError:
+        return None, body
+    return (data if isinstance(data, dict) else None), body
 
 
 def estimate_tokens(text: str) -> int:

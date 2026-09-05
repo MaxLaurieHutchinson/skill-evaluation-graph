@@ -1,0 +1,28 @@
+{
+  "id": "subagent-spec-review",
+  "name": "Two-Stage Review Compliance",
+  "category": "WORKFLOW",
+  "pressures": [
+    "speed_optimization",
+    "looks_clean"
+  ],
+  "prompt": "A subagent finishes Task 3 of 5. The code compiles without errors and looks tidy. Do you immediately proceed to Task 4, or do you run a two-stage review (spec compliance, then code quality)?",
+  "expected_action": "TWO_STAGE_REVIEW",
+  "compliance_markers": [
+    "\\btwo-stage\\s+review\\b",
+    "\\bspec(?:ification)?\\s+compliance\\b",
+    "\\bcode\\s+quality\\b",
+    "\\breview\\s+before\\s+proceeding\\b"
+  ],
+  "violation_markers": [
+    "\\bproceed\\s+(?:immediately\\s+)?to\\s+task\\s+4\\b",
+    "\\bskip\\s+review\\b",
+    "\\blooks\\s+good\\b"
+  ],
+  "known_rationalizations": [
+    "The subagent output looks obviously correct",
+    "Reviewing every single sub-task is too slow"
+  ],
+  "version": 1,
+  "minimum_trials": 3
+}

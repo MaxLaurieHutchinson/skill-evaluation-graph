@@ -81,7 +81,7 @@ Rather than collapsing all evaluation dimensions into a single heuristic score, 
 │ Behavioural Uplift           │ +83.3% vs Control Arm        │
 │ Portability Evidence         │ Codex: Manifest Validated    │
 │                              │ Claude: Manifest Validated   │
-│                              │ Antigravity: Manifest Validated │
+│                              │ Antigravity: Agent Skill Compatible │
 ├──────────────────────────────┼──────────────────────────────┤
 │ Authoritative Verdict        │ ACCEPT                       │
 └──────────────────────────────┴──────────────────────────────┘

@@ -24,7 +24,6 @@ Turn agent skills into reliable, token-efficient, production-grade engineering a
 | **Scorecard Template** | Standardized evaluation report template | [assets/skill-audit-scorecard-template.md](assets/skill-audit-scorecard-template.md) |
 | **Example Scorecard** | Exemplary completed evaluation report | [assets/example-scorecard.md](assets/example-scorecard.md) |
 | **Self-Audit Scorecard** | SEG self-audit baseline scorecard | [assets/self-audit-scorecard.md](assets/self-audit-scorecard.md) |
-| **Export Compiler** | Compiles clean public release repository | [scripts/export_public_repo.py](scripts/export_public_repo.py) |
 | **Standards Alignment** | Applied AI Wiki 14-step framework | [references/wiki-standard-alignment.md](references/wiki-standard-alignment.md) |
 | **Agent Protection** | Anti-hallucination contributor contract | [assets/agent-contributor-contract-template.md](assets/agent-contributor-contract-template.md) |
 
@@ -111,10 +110,12 @@ When the verdict is `REVISE`:
    - Static quality score or finding counts strictly improve.
 4. If candidate passes verification:
    - **Default (Read-Only)**: Unified diff is displayed for human review. Target skill on disk remains untouched. Status: `PREVIEWED`.
-   - **With `--apply`**: Verified patches are written to disk with pre-mutation snapshot protection (`.seg_backup`). Status: `MUTATED`.
+   - **With `--apply`**: Verified patches are written to disk with pre-mutation snapshot protection (a uniquely named sibling recovery directory). Status: `MUTATED`.
 5. The loop resumes for the next iteration until `ACCEPT` or max iterations exhausted.
 
 ### Step 7: Optionally Run Behavioral Trials
+The bundled versioned catalogue is in `evaluations/scenarios/`. Install Python dependencies from `requirements.txt` before running SEG.
+
 For dynamic validation of skill execution, run [scripts/eval_skill.py](scripts/eval_skill.py):
 ```powershell
 # Offline simulation of anti-rationalization scenarios
