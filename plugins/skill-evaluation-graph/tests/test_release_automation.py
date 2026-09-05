@@ -119,6 +119,25 @@ class TestReleaseAutomation(unittest.TestCase):
                 path = first[key]
                 self.assertEqual(expected[path.name], hashlib.sha256(path.read_bytes()).hexdigest())
 
+    def test_release_builder_packages_the_canonical_repository(self):
+        version = (REPO / "version.txt").read_text(encoding="utf-8").strip()
+        with tempfile.TemporaryDirectory() as td:
+            artifacts = build_release_artifacts(REPO, version, Path(td))
+            with zipfile.ZipFile(artifacts["skill_zip"]) as archive:
+                names = set(archive.namelist())
+                self.assertIn("skill-evaluation-graph/SKILL.md", names)
+                self.assertIn("skill-evaluation-graph/src/seg/receipts.py", names)
+                self.assertIn("skill-evaluation-graph/evaluations/scenarios/tdd_pressure.json", names)
+            with zipfile.ZipFile(artifacts["repository_zip"]) as archive:
+                names = set(archive.namelist())
+                prefix = f"skill-evaluation-graph-v{version}/"
+                self.assertIn(prefix + "README.md", names)
+                self.assertIn(prefix + "RELEASING.md", names)
+                self.assertIn(prefix + ".github/workflows/release.yml", names)
+                self.assertFalse(any("/.git/" in name or "/.audit_receipts/" in name or "/dist/" in name for name in names))
+            checksum_lines = artifacts["checksums"].read_text(encoding="utf-8").splitlines()
+            self.assertEqual(len(checksum_lines), 2)
+
     def test_release_validator_requires_release_automation_regressions(self):
         with tempfile.TemporaryDirectory() as td:
             repo = Path(td) / "release"
