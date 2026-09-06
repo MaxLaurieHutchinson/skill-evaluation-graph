@@ -287,7 +287,7 @@ SEG is open source and independently maintained.
 If SEG saves you time, improves your Agent Skills, or you would like to support continued development, you can support the project through GitHub Sponsors or Buy Me a Coffee.
 
 [![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-Support-ea4aaa?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/MaxLaurieHutchinson)
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-FFDD00?logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/maxhutchinson)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-FFDD00?logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/MaxLHutchinson)
 
 Support is optional. Stars, issues, feedback, benchmarks, and contributions are equally valuable.
 
